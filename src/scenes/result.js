@@ -98,7 +98,7 @@ document.head.appendChild(styleElement);
             fill: '#ffffff',
             stroke: '#000000',
             strokeThickness: 5
-        }).setOrigin(0.5,5).setDepth(10).setVisible(true);
+        }).setOrigin(0.5).setDepth(10).setVisible(true);
 
         // Nombre del ganador
         this.winnerNameText = this.add.text(400, 400, data.result.winner.config.name.toUpperCase() + ' WINS!', {
@@ -114,7 +114,7 @@ document.head.appendChild(styleElement);
             fill: '#ffffff',
             stroke: '#000000',
             strokeThickness: 5
-        }).setOrigin(0.5,-5).setDepth(10).setVisible(true);
+        }).setOrigin(0.5).setDepth(10).setVisible(true);
 
         // Evento para reiniciar el juego
         this.restartText.setInteractive();

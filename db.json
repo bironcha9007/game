@@ -1,0 +1,58 @@
+{
+  "characters": [
+    {
+      "id": 1,
+      "name": "ryu",
+      "image": "/assets/char/ryu/ryu-big.png"
+    },
+    {
+      "id": 2,
+      "name": "ken",
+      "image": "/assets/char/ken/ken-big.png"
+    },
+    {
+      "id": 3,
+      "name": "akuma",
+      "image": "/assets/char/akuma/akuma-big.png"
+    },
+    {
+      "id": 4,
+      "name": "chun",
+      "image": "/assets/char/chun/chun-big.png"
+    },
+    {
+      "id": 5,
+      "name": "blanka",
+      "image": "/assets/char/blanka/blanka-big.png"
+    },
+    {
+      "id": 6,
+      "name": "iori",
+      "image": "/assets/char/iori/iori-big.png"
+    },
+    {
+      "id": 7,
+      "name": "terry",
+      "image": "/assets/char/terry/terry-big.png"
+    }
+  ],
+  "effects": [
+    {
+      "id": 1,
+      "name": "fireball",
+      "image": "/assets/effects/fireballs/fireball.png"
+    },
+    {
+      "id": 2,
+      "name": "hitspark",
+      "image": "/assets/effects/hitsparks/hitspark.png"
+    }
+  ],
+  "stages": [
+    {
+      "id": 1,
+      "name": "base",
+      "image": "/assets/stages/ground.png"
+    }
+  ]
+}

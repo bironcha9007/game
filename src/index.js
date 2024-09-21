@@ -25,7 +25,7 @@ characters.forEach(character => {
     });
 });
 document.addEventListener('DOMContentLoaded', () => {
-    openingAudio = new Audio('../assets/audio/Opening.mp3');
+    openingAudio = new Audio('/assets/audio/Opening.mp3');
     openingAudio.loop = true; 
     openingAudio.volume = 0.0;
     openingAudio.play(); 

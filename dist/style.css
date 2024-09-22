@@ -68,7 +68,7 @@ position: relative;
 width: 100%;
 height: 100%;
 text-align: center;
-line-height: 45px;
+line-height: 30px;
 color: #fff;
 }
 #confirmButton {
@@ -115,13 +115,16 @@ box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5), 0px 1px 2px rgba(255, 0, 0, 0.75);
 outline: none;
 }
 #characterSelect {
-    display: none;
-
-    background:transparent;
+    display: none;               /* Mantiene el contenedor oculto inicialmente */
+    background: transparent;
     padding: 0px;
-height: 100%;
+    height: 87%;
     text-align: center;
     width: 100%;
+    position: absolute;          /* Posiciona el contenedor de forma absoluta */
+    top: 50%;                    /* Mueve la parte superior al 50% del contenedor padre */
+    left: 50%;                   /* Mueve la parte izquierda al 50% */
+    transform: translate(-50%, -50%); /* Traslada el contenedor para centrarlo vertical y horizontalmente */
 }
 
 /* Estilo inicial */
@@ -206,7 +209,7 @@ margin-top: 1%;
 
 .character2 img {
     width: 450px;
-    height: 100px;
+    height: 70px;
     border: none;
 
 }
@@ -244,7 +247,26 @@ overflow: hidden; /* Ocultar cualquier parte de la imagen que salga del contened
 
 
 }
+#controls {
+    display: none; /* Están ocultos por defecto */
+    position: absolute;
+    bottom: 500px; /* Ajusta según sea necesario */
+    left: 20px; /* Ajusta según sea necesario */
+    z-index: 16; /* Asegúrate de que esté por encima del canvas */
+}
 
+.button {
+    width: 100px;
+    height: 100px;
+    background-color: #00ff00;
+    margin: 5px;
+    display: inline-block;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 100px; /* Centrar el texto verticalmente */
+    color: white;
+    font-weight: bold;
+}
 .character-name {
     text-align: center;
     color: rgb(255, 221, 0);
@@ -277,12 +299,20 @@ overflow: hidden; /* Ocultar cualquier parte de la imagen que salga del contened
 }
 
 @media (max-width: 600px) {
-
+    body {
+        background: url('assets/stages/intro/bg6.png') no-repeat center center fixed;
+        background-size:contain;
+        background-color: #ffffff;
+        margin: 0;
+        overflow: hidden;
+        /* Cambiado a hidden para evitar scroll innecesario */
+        font-family: Arial, sans-serif;
+    }
     #startButton,
     #startButton2 {
         width: 100px;
         height: 30px;
-        line-height: 30px;
+        line-height: 25px;
         transform: translate(50%, 50%);
     }
 
@@ -294,5 +324,21 @@ overflow: hidden; /* Ocultar cualquier parte de la imagen que salga del contened
     .character img {
         width: 50px;
         height: 50px;
+    }
+
+    .selected-character {
+        width: 140px;
+        height: 140px;
+        margin: 5px;
+        background-size: cover;
+        padding: auto;
+        transform: skew(-0deg);
+        overflow: hidden;
+    }
+
+    .character2 img {
+        width: 350px;
+        height: 71px;
+        border: none;
     }
 }

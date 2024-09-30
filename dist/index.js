@@ -25,7 +25,7 @@ characters.forEach(character => {
     });
 });
 document.addEventListener('DOMContentLoaded', () => {
-    openingAudio = new Audio('/assets/Opening.mp3');
+    openingAudio = new Audio('/assets/audio/Opening.mp3');
     openingAudio.loop = true; 
     openingAudio.volume = 0.0;
     openingAudio.play(); 
@@ -86,7 +86,7 @@ function selectCharacter(event) {
 
     console.log(`Player ${player} selected ${character}`);
 
-    const characterImgUrl = `./assets/char/${character}/${character}-big.png`;
+    const characterImgUrl = `/assets/char/${character}/${character}-big.png`;
     const characterName = character.charAt(0).toUpperCase() + character.slice(1);
 
     if (player === '1') {

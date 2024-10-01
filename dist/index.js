@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.character').forEach(character => { character.addEventListener('click', selectCharacter);
     });
 });
-
+document.getElementById('controls').style.display = 'none';
 function showCharacterSelect() {
     
     // Restablecer la selección de personajes
@@ -203,3 +203,4 @@ function startGame2() {
 }
 
 export default startGame2;
+

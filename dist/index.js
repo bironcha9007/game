@@ -182,7 +182,7 @@ function startGame2() {
             default: 'arcade',
             arcade: {
                 gravity: { y: 650 },
-                debug: true 
+                debug: false 
             }
         },
         scene: [LoadScene, MainScene, HudScene, ResultScene],
@@ -203,4 +203,3 @@ function startGame2() {
 }
 
 export default startGame2;
-

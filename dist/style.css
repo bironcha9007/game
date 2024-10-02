@@ -399,7 +399,7 @@ overflow: hidden; /* Ocultar cualquier parte de la imagen que salga del contened
         display: none;
         background: url(assets/stages/intro/bg7.png) repeat center center fixed;
         padding: 0px;
-        height: 55%;
+        height: 70%;
         text-align: center;
         width: 100%;
         position: absolute;

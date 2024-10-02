@@ -2,7 +2,7 @@ var mov = [
     { name: 'stance', frame: { start: 10138, end: 10144, frameRate: 12, repeat: -1 } },
     { name: 'walkf', frame: { start: 10146, end: 10153, frameRate: 12, repeat: -1 }, speed: 150 },
     { name: 'walkb', frame: { start: 10154, end: 10161, frameRate: 12, repeat: -1 }, speed: 100 },
-    { name: 'jump', frame: { start: 10162, end: 10171, frameRate: 10, repeat: 0 }, speedY: 320 },
+    { name: 'jump', frame: { start: 10162, end: 10179, frameRate: 10, repeat: 0 }, speedY: 320 },
     { name: 'jumpf', frame: { start: 10172, end: 10178, frameRate: 8, repeat: 0 }, speedX: 150, speedY: 320 },
     { name: 'jumpb', frame: { start: 10178, end: 10172, frameRate: 10, repeat: 0 }, speedX: 150, speedY: 320 },
     { name: 'dashf', frame: { start: 10205, end: 10210, frameRate: 12, repeat: 0 }, speed: 220, fx: { name: 'ground-dust', x: -80, y: 5 } },

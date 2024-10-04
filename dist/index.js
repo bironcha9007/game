@@ -130,7 +130,7 @@ function startGame() {
             scene: [LoadScene, MainScene, HudScene, ResultScene]
         });
 
-        game.events.on('startNewFight', () => {
+        game.events.on('startNewFight2', () => {
             game.scene.stop('resultscene');
             game.scene.stop('mainscene');
             game.scene.stop('hudscene');
@@ -190,7 +190,14 @@ function startGame2() {
             gamepad: true
         }
     });
+    game.events.on('startNewFight', () => {
+        game.scene.stop('resultscene');
+        game.scene.stop('mainscene');
+        game.scene.stop('hudscene');
+        game.scene.stop('loadscene');
 
+        game.scene.start('loadscene');  
+    });
     // Reiniciar el juego desde la escena de carga
     game.scene.start('loadscene');
     document.body.style.background = '#000'; 

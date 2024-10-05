@@ -340,10 +340,10 @@ body {
 }
 
 .select {
-    margin: 1%;
+    margin-bottom: 3%;
     padding: 0%;
     display: flex;
-
+    margin-top: 3%;
     align-content: center;
     justify-content: center;
     align-items: center;

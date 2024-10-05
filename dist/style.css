@@ -261,10 +261,10 @@ overflow: hidden; /* Ocultar cualquier parte de la imagen que salga del contened
 .button {
     width: 80px;
     height: 80px;
-    background-color: #ff0000;
+    background-color: #ff000075;
     margin: 10px;
     display: inline-block;
-    border-color: red;
+    border-color: rgba(255, 0, 0, 0.65);
     border-radius: 50px;
     text-align: center;
     line-height: 80px; /* Centrar el texto verticalmente */
@@ -473,5 +473,30 @@ margin-top: 1%;
     height: 70px;
     border: none;
 
+}
+#controls {
+    display: none; /* Están ocultos por defecto */
+    position: absolute;
+    bottom: 30%; /* Ajustado más cerca del borde inferior */
+    left: 84%;
+    right: 20px; /* Puedes ajustar según tu preferencia */
+    z-index: 103; /* Asegúrate de que esté por encima del canvas */
+}
+.button {
+    width: 40px;
+    height: 40px;
+    background-color: #ff000075;
+    margin: 5px;
+    display: inline-block;
+    border-color: rgba(255, 0, 0, 0.65);
+    border-radius: 50px;
+    text-align: center;
+    line-height: 42px; /* Centrar el texto verticalmente */
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.908); /* Añadir una sombra para destacar más los botones */
+    cursor: pointer; /* Hacer que el cursor cambie a una mano al pasar sobre el botón */
+    opacity: 0.5; /* Casi transparente inicialmente */
+    transition: opacity 0.2s ease, background-color 0.2s ease; /* Animación suave para cambios */
 }
 }

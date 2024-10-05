@@ -53,7 +53,7 @@ var spmoves = [
 
 var chun = {
     id: 'p2', name: 'chun', fullname: 'Chun-Lee',
-    width: 40, height: 100, health: 1000, stun: 200, power: 200, weight: 80, mov, atk, spmoves, cricarts,
+    width: 50, height: 100, health: 1000, stun: 200, power: 200, weight: 80, mov, atk, spmoves, cricarts,
     hurtbox: { x: 0, y: 0, width: 40, height: 100,
     comment: 'Prove yourself' }
 }

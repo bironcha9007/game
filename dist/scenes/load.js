@@ -5,7 +5,7 @@ var loadscene = new Phaser.Class({
     },
     configs: [],
     preload: function () {
-        var charpath = "/assets/char/";
+        var charpath = "assets/char/";
         this.load.multiatlas('ryu', charpath + 'ryu/ryu.json', charpath + 'ryu');
         this.load.multiatlas('ken', charpath + 'ken/ken.json', charpath + 'ken');
         this.load.multiatlas('akuma', charpath + 'akuma/akuma.json', charpath + 'akuma');
@@ -23,19 +23,23 @@ var loadscene = new Phaser.Class({
         this.load.script('p7-config', 'config/char/terry.js');
 
         this.load.script('fx-config', 'config/effects/effect.js');
-        this.load.image('base', '/src/assetsstages/ground.png');
-        this.load.image('white_spark', '/src/assetsparticles/white.png');
-        this.load.image('ryuBig', '/src/assetschar/ryu/ryu-big.png');  // Asegúrate de que esta ruta es correcta
-        this.load.image('kenBig', '/src/assetschar/ken/ken-big.png');  // Asegúrate de que esta ruta es correcta
-        this.load.image('akumaBig', '/src/assetschar/akuma/akuma-big.png');
-        this.load.image('chunBig', '/src/assetschar/chun/chun-big.png');
-        this.load.image('blankaBig', '/src/assetschar/blanka/blanka-big.png');
-        this.load.image('ioriBig', '/src/assetschar/iori/iori-big.png');
-        this.load.image('terryBig', '/src/assets/char/terry/terry-big.png');
-        this.load.image('ioriWin', '/src/assetschar/iori/iori-win.png');
-        this.load.image('terryWin', '/src/assetschar/terry/terry-win.png');
-
-        var fxpath = "/assets/effects/";
+        this.load.image('base', 'assets/stages/ground.png');
+        this.load.image('white_spark', 'assets/particles/white.png');
+        this.load.image('ryuBig', 'assets/char/ryu/ryu-big.png');  // Asegúrate de que esta ruta es correcta
+        this.load.image('kenBig', 'assets/char/ken/ken-big.png');  // Asegúrate de que esta ruta es correcta
+        this.load.image('akumaBig', 'assets/char/akuma/akuma-big.png');
+        this.load.image('chunBig', 'assets/char/chun/chun-big.png');
+        this.load.image('blankaBig', 'assets/char/blanka/blanka-big.png');
+        this.load.image('ioriBig', 'assets/char/iori/iori-big.png');
+        this.load.image('terryBig', 'assets/char/terry/terry-big.png');
+        this.load.image('ioriWin', 'assets/char/iori/iori-win.png');
+        this.load.image('terryWin', 'assets/char/terry/terry-win.png');
+        this.load.image('ryWin', 'assets/char/ryu/ryu-win.png');
+        this.load.image('kenWin', 'assets/char/ken/ken-win.png');
+        this.load.image('akumaWin', 'assets/char/akuma/akuma-win.png');
+        this.load.image('chunWin', 'assets/char/chun/chun-win.png');
+        this.load.image('blankaWin', 'assets/char/blanka/blanka-win.png');
+        var fxpath = "assets/effects/";
         var fx = ['dizzies', 'fire_ice_shock', 'fireballs', 'ground', 'hitsparks', 'misc', 'shadow', 'superart'];
         for (var i = 1; i < fx.length; i++) {
             this.load.multiatlas(fx[i], fxpath + fx[i] + '/' + fx[i] + '.json', fxpath + fx[i]);
@@ -59,7 +63,10 @@ var loadscene = new Phaser.Class({
         var data = { result: { round: 1, p1wins: 0, p2wins: 0 } };
         this.scene.start('mainscene');
         this.scene.start('hudscene', data);
+
+        
     }
+
 });
 
 export default loadscene;

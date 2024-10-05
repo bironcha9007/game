@@ -1,14 +1,180 @@
 import Phaser from 'phaser';
 
+class VirtualJoystick {
+    constructor(scene, player) {
+        this.scene = scene;
+        this.player = player;
+
+        // Crear un contenedor para el joystick
+        this.joystickBase = this.scene.add.circle(280, 280, 30, 0x6666ff).setScrollFactor(0);
+        this.joystickBase.setAlpha(0.1);
+        this.joystickHandle = this.scene.add.circle(280, 280, 20, 0xff0000).setScrollFactor(0);
+        this.joystickBase.setDepth(99); 
+        this.joystickHandle.setAlpha(0.1); // Ajustar la opacidad
+        this.joystickHandle.setDepth(100); // Asegura que esté por encima
+        this.maxDistance = 40;
+        this.isDragging = false;
+
+        // Inicializar las propiedades de dirección del joystick
+        this.leftPressed = false;
+        this.rightPressed = false;
+        this.upPressed = false;
+        this.downPressed = false;
+
+        this.init();
+    }
+
+    init() {
+        this.scene.input.on('pointerdown', (pointer) => {
+            this.isDragging = true;
+            this.moveHandle(pointer);
+            this.resetJoystick();
+        });
+
+        this.scene.input.on('pointermove', (pointer) => {
+            if (this.isDragging) {
+                this.moveHandle(pointer);
+            }
+        });
+
+        this.scene.input.on('pointerup', () => {
+            this.isDragging = false;
+            this.resetJoystick();
+        });
+    }
+
+    moveHandle(pointer) {
+        if (this.player.id === 'p1') { 
+            const distX = pointer.x - this.joystickBase.x;
+            const distY = pointer.y - this.joystickBase.y;
+            const angle = Math.atan2(distY, distX);
+
+            // Calcular la distancia desde el centro del joystick
+            const distance = Math.min(this.maxDistance, Math.sqrt(distX * distX + distY * distY));
+
+            // Mover el joystick dentro de los límites de `maxDistance`
+            this.joystickHandle.x = this.joystickBase.x + distance * Math.cos(angle);
+            this.joystickHandle.y = this.joystickBase.y + distance * Math.sin(angle);
+
+            // Resetear las direcciones antes de reasignarlas
+            this.leftPressed = false;
+            this.rightPressed = false;
+            this.upPressed = false;
+            this.downPressed = false;
+
+            let angleDeg = Phaser.Math.RadToDeg(angle);
+            if (angleDeg < 0) {
+                angleDeg += 360; // Convertir ángulo negativo en positivo
+            }
+            // Actualizar el movimiento del jugador según la dirección del joystick
+            if (angleDeg >= 0 && angleDeg < 45) {
+                this.player.twalk(this.player.f);  // Caminar hacia la derecha
+                if (this.player.state === 'crouch') this.player.tstance();
+                this.rightPressed = true;
+            }
+            
+            else if (angleDeg >= 160 && angleDeg < 210) {
+                this.player.twalk(this.player.b);  // Caminar hacia la izquierda
+                if (this.player.state === 'crouch') this.player.tstance();
+                this.leftPressed = true;
+            } 
+            
+            else if (angleDeg >= 250 && angleDeg < 290) {
+               
+                    this.player.tjump('');  // Saltar hacia atrás
+                
+                this.upPressed = true;
+            } 
+            
+            else if (angleDeg >= 200 && angleDeg < 230) {
+                
+              
+                this.leftPressed = true;
+                this.upPressed = true;
+                this.player.tjump('b'); // Saltar hacia atrás
+           } 
+            else if (angleDeg >= 295 && angleDeg < 330) {
+            
+                             
+                        this.rightPressed = true;
+                        this.upPressed = true;
+                        this.player.tjump('f'); // Saltar hacia adelante
+                        }
+            else if (angleDeg >= 80 && angleDeg < 130) {
+                this.player.tcrouch('');  // Agacharse
+                this.downPressed = true;
+            }
+        }
+    }
+
+    resetJoystick() {
+        this.joystickHandle.x = this.joystickBase.x;
+        this.joystickHandle.y = this.joystickBase.y;
+        this.player.tstance();
+
+        // Resetear las direcciones cuando se suelta el joystick
+        this.leftPressed = false;
+        this.rightPressed = false;
+        this.upPressed = false;
+        this.downPressed = false;
+    }
+}
+
+
+class TouchButtons {
+    constructor(scene, player) {
+        this.scene = scene;
+        this.player = player;
+
+        if (this.player.id === 'p1') {
+            this.lpButton = document.getElementById('lp');
+            this.lkButton = document.getElementById('lk');
+            this.mpButton = document.getElementById('mp');
+            this.mkButton = document.getElementById('mk');
+            this.hpButton = document.getElementById('hp');
+            this.hkButton = document.getElementById('hk');
+
+            this.addTouchListeners();
+        }
+    }
+
+    addTouchListeners() {
+        this.lpButton.addEventListener('pointerdown', () => {
+            this.player.tattk('slp');  // Simulate light punch
+        });
+
+        this.lkButton.addEventListener('pointerdown', () => {
+            this.player.tattk('slk');  // Simulate light kick
+        });
+
+        this.mpButton.addEventListener('pointerdown', () => {
+            this.player.tattk('smp');  // Medium punch
+        });
+
+        this.mkButton.addEventListener('pointerdown', () => {
+            this.player.tattk('smk');  // Medium kick
+        });
+
+        this.hpButton.addEventListener('pointerdown', () => {
+            this.player.tattk('shp');  // High punch
+        });
+
+        this.hkButton.addEventListener('pointerdown', () => {
+            this.player.tattk('shk');  // High kick
+        });
+    }
+}
 var Input = new Phaser.Class({
     initialize: function Input(scene, player) {
         this.player = player;
         this.scene = scene;
         this.setupKeys();
-        
+        this.joystick = new VirtualJoystick(scene, player);
+        this.touchButtons = new TouchButtons(scene, player);
     },
+
     lock: function (state) {
-        state === true ? this.scene.input.keyboard.enabled = false : this.scene.input.keyboard.enabled = true;
+        this.scene.input.keyboard.enabled = !state;
     },
     setupKeys: function () {
         if (this.player.id === 'p1') {
@@ -122,41 +288,64 @@ var Input = new Phaser.Class({
     
 
     },
-
     controlDirection: function () {
         var state = this.player.state;
-        var moves = ['attk', 'spattk', 'crattk', 'tjattk'];
+        var moves = ['attk', 'spattk', 'crattk', 'tjattk', 'twalk'];
     
-        if (this.r.isDown && this.u.isDown) {
+        // Verificar si el joystick o las teclas no están siendo usados y el jugador está en el suelo
+        if (!this.joystick.isDragging && !this.r.isDown && !this.l.isDown && !this.u.isDown && !this.d.isDown && this.player.container.body.onFloor()) {
             if (!moves.includes(state)) {
-                this.player.tjump(this.player.f);
-            }
-        } else if (this.l.isDown && this.u.isDown) {
-            if (!moves.includes(state)) {
-                this.player.tjump(this.player.b);
-            }
-        } else if (this.d.isDown) {
-            if (!moves.includes(state)) {
-                this.player.tcrouch(false);
-            }
-        } else if (this.r.isDown) {
-            if (!moves.includes(state)) {
-                this.player.twalk(this.player.f);
-            }
-        } else if (this.l.isDown) {
-            if (!moves.includes(state)) {
-                this.player.twalk(this.player.b);
-            }
-        } else if (this.u.isDown) {
-            if (!moves.includes(state)) {
-                this.player.tjump('');
-            }
-        } else if (this.player.container.body.onFloor()) {
-            if (!moves.includes(state)) {
-                this.player.tstance();
+                this.player.tstance(); // Cambiar a estado normal
             }
         }
-    },
+    
+        // Saltar hacia adelante o hacia atrás (teclas o joystick)
+        if ((this.r.isDown && this.u.isDown) || (this.joystick.rightPressed && this.joystick.upPressed)) {
+            if (!moves.includes(state)) {
+                this.player.tjump(this.player.f); // Salto hacia adelante
+            }
+        } else if ((this.l.isDown && this.u.isDown) || (this.joystick.leftPressed && this.joystick.upPressed)) {
+            if (!moves.includes(state)) {
+                this.player.tjump(this.player.b); // Salto hacia atrás
+            }
+        }
+    
+        // Control de agacharse (teclas o joystick)
+        else if (this.d.isDown || this.joystick.downPressed) {
+            if (!moves.includes(state)) {
+                this.player.tcrouch(''); // Agacharse
+            }
+        }
+    
+        // Control para detenerse de agacharse si se mueve hacia otra dirección (right, left, up)
+        else if ((this.joystick.upPressed) || (this.joystick.rightPressed) || (this.joystick.leftPressed)) {
+            if (state === 'crouch') {
+                this.player.tstance(); // Volver a estado de pie si estaba agachado
+            }
+        }
+    
+        // Control de caminar hacia la derecha (teclas o joystick)
+        else if (this.r.isDown || this.joystick.rightPressed) {
+            if (!moves.includes(state)) {
+                this.player.twalk(this.player.f); // Caminar hacia adelante
+            }
+        }
+    
+        // Control de caminar hacia la izquierda (teclas o joystick)
+        else if (this.l.isDown || this.joystick.leftPressed) {
+            if (!moves.includes(state)) {
+                this.player.twalk(this.player.b); // Caminar hacia atrás
+            }
+        }
+    
+        // Control de salto (teclas o joystick)
+        else if (this.u.isDown || this.joystick.upPressed) {
+            if (!moves.includes(state)) {
+                this.player.tjump(''); // Salto vertical
+            }
+        }
+    }
+    ,
     controlAttack: function () {
 
         
@@ -245,8 +434,16 @@ var Input = new Phaser.Class({
             if (this['ca' + this.player.f].matched) {
                 this.player.tfrattk('ca1');
             }
+            if (this.joystick.upPressed) {
+                if (this.joystick.rightPressed) {
+                    this.player.tjump(this.player.f); // Saltar hacia adelante
+                } else if (this.joystick.leftPressed) {
+                    this.player.tjump(this.player.b); // Saltar hacia atrás
+                }
+            }
         }, this);
     }
+    
 });
-
+export { Input, VirtualJoystick, TouchButtons };
 export default Input;

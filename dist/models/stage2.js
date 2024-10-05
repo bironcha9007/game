@@ -8,15 +8,15 @@ var Staget = new Phaser.Class({
             this.scene.add.existing(this);
     },
     loadImages: function () {
-        this.scene.load.image('makoto-1', '../assets/stages/intro/bg7.png');
+        this.scene.load.image('makoto-1', 'assets/stages/intro/bg8.png');
         // Cargar imágenes de Ryu y Ken
-        this.scene.load.image('ryuBig', '../assets/char/ryu/ryu-big.png');
-        this.scene.load.image('kenBig', '../assets/char/ken/ken-big.png');
-        this.scene.load.image('akumaBig', '/assets/char/akuma/akuma-big.png');
-        this.scene.load.image('chunBig', '/assets/char/chun/chun-big.png');
-        this.scene.load.image('blankaBig', '/assets/char/blanka/blanka-big.png');
-        this.scene.load.image('ioriWin', '/assets/char/iori/iori-win.png');
-        this.scene.load.image('terry', '/assets/char/terry/terry-win.png');
+        this.scene.load.image('ryuWin', 'assets/char/ryu/ryu-win.png');
+        this.scene.load.image('kenWin', 'assets/char/ken/ken-win.png');
+        this.scene.load.image('akumaWin', 'assets/char/akuma/akuma-win.png');
+        this.scene.load.image('chunWin', 'assets/char/chun/chun-win.png');
+        this.scene.load.image('blankaWin', 'assets/char/blanka/blanka-win.png');
+        this.scene.load.image('ioriWin', 'assets/char/iori/iori-win.png');
+        this.scene.load.image('terry', 'assets/char/terry/terry-win.png');
         
     },
     start: function(winner) {
@@ -34,15 +34,15 @@ var Staget = new Phaser.Class({
         // Agregar imagen del ganador detrás del texto de ganador
         let winnerImage = '';
         if (winner.config.name.toLowerCase() === 'ryu') {
-            winnerImage = 'ryuBig';
+            winnerImage = 'ryuWin';
         } else if (winner.config.name.toLowerCase() === 'ken') {
-            winnerImage = 'kenBig';
+            winnerImage = 'kenWin';
         }else if (winner.config.name.toLowerCase() === 'akuma') {
-            winnerImage = 'akumaBig';
+            winnerImage = 'akumaWin';
         }else if (winner.config.name.toLowerCase() === 'chun') {
-            winnerImage = 'chunBig';
+            winnerImage = 'chunWin';
         }else if (winner.config.name.toLowerCase() === 'blanka') {
-            winnerImage = 'blankaBig';
+            winnerImage = 'blankaWin';
         }else if (winner.config.name.toLowerCase() === 'iori') {
             winnerImage = 'ioriWin';
         }else if (winner.config.name.toLowerCase() === 'terry') {
@@ -52,7 +52,7 @@ var Staget = new Phaser.Class({
         
 
         if (winnerImage) {
-            this.winnerBackground = this.scene.add.image(400, 300, winnerImage)
+            this.winnerBackground = this.scene.add.image(500, 400, winnerImage)
                 .setOrigin(0.5, 0.5)
                 .setDepth(1); // Asegúrate de que el fondo del ganador esté detrás del texto
         }

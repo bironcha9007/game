@@ -7,7 +7,7 @@ var mov = [
     { name: 'jumpb', frame: { start: 10197, end: 10199, frameRate: 8, repeat: -1 }, speedX: 150, speedY: 340 },
     { name: 'dashf', frame: { start: 10219, end: 10224, frameRate: 12, repeat: 0 }, speed: 220, fx: { name: 'ground-dust', x: -80, y: 5 } },
     { name: 'dashb', frame: { start: 10225, end: 10230, frameRate: 12, repeat: 0 }, speed: 160, fx: { name: 'ground-dust', x: -80, y: 5 } },
-    { name: 'crouch', frame: { start: 10172, end: 10172, frameRate: 6, repeat: 0 }, speed: 0, hurtbox: { x: 0, y: 20, width: 40, height: 60 } },
+    { name: 'crouch', frame: { start: 10172, end: 10172, frameRate: 6, repeat: -1 }, speed: 0, hurtbox: { x: 0, y: 20, width: 40, height: 60 } },
     { name: 'blockh', frame: { start: 10211, end: 10212, frameRate: 6, repeat: 0 }, speed: 0, noFrames: 4 },
     { name: 'hith', frame: { start: 10562, end: 10565, frameRate: 8, repeat: 0 }, speed: 0 },
 ]

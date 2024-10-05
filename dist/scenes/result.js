@@ -11,14 +11,14 @@ var resultscene = new Phaser.Class({
 
     preload: function () {
         // Cargar imágenes del fondo y personajes
-        this.load.image('ryuBig', '/assets/char/ryu/ryu-big.png');
-        this.load.image('kenBig', '/assets/char/ken/ken-big.png');
-        this.load.image('akumaBig', '/assets/char/akuma/akuma-big.png');
-        this.load.image('chunBig', '/assets/char/chun/chun-big.png');
-        this.load.image('blankaBig', '/assets/char/blanka/blanka-big.png');
-        this.load.image('ioriBig', '/assets/char/iori/iori-big.png');
-        this.load.image('terryBig', '/assets/char/terry/terry-big.png');
-        this.load.image('makoto-1', '/assets/stages/intro/bg7.png');
+        this.load.image('ryuBig', 'assets/char/ryu/ryu-big.png');
+        this.load.image('kenBig', 'assets/char/ken/ken-big.png');
+        this.load.image('akumaBig', 'assets/char/akuma/akuma-big.png');
+        this.load.image('chunBig', 'assets/char/chun/chun-big.png');
+        this.load.image('blankaBig', 'assets/char/blanka/blanka-big.png');
+        this.load.image('ioriBig', 'assets/char/iori/iori-big.png');
+        this.load.image('terryBig', 'assets/char/terry/terry-big.png');
+        this.load.image('makoto-1', 'assets/stages/intro/bg8.png');
 
         // Cargar el fondo del escenario
         this.stage = new Stage(this, 0, 0, null, 0);
@@ -31,60 +31,60 @@ var resultscene = new Phaser.Class({
     },
 
     create: function (data) {
-       
-    const style = `
-    body {
-        background-color: #000000;
-        margin: 0;
-        overflow: hidden;
-    }
-    #gameContainer {
-        position: relative;
-        width: 100%;
-        height: 100vh;
-    }
-    canvas {
-        display: block;
-        z-index: 1;
-    }
-    .text-win {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 64px;
-        color: #ffffff;
-        text-shadow: 2px 2px 4px #000000;
-        z-index: 10;
-    }
-    .text-winner-name {
-        position: absolute;
-        top: calc(50% + 70px);
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 32px;
-        color: #ffffff;
-        text-shadow: 2px 2px 4px #000000;
-        z-index: 10;
-    }
-    .text-restart {
-        position: absolute;
-        top: calc(50% + 150px);
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 24px;
-        color: #ffffff;
-        text-shadow: 2px 2px 4px #000000;
-        z-index: 10;
-        cursor: pointer;
-    }
-    .text-restart:hover {
-        color: #ffcc00;
-    }
-`;
-const styleElement = document.createElement('style');
-styleElement.textContent = style;
-document.head.appendChild(styleElement);
+        const style = `
+            body {
+                background-color: #000000;
+                margin: 0;
+                overflow: hidden;
+            }
+            #gameContainer {
+                position: relative;
+                width: 100%;
+                height: 100vh;
+            }
+            canvas {
+                display: block;
+                z-index: 1;
+            }
+            .text-win {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 64px;
+                color: #ffffff;
+                text-shadow: 2px 2px 4px #000000;
+                z-index: 10;
+            }
+            .text-winner-name {
+                position: absolute;
+                top: calc(50% + 70px);
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 32px;
+                color: #ffffff;
+                text-shadow: 2px 2px 4px #000000;
+                z-index: 10;
+            }
+            .text-restart {
+                position: absolute;
+                top: calc(50% + 150px);
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 24px;
+                color: #ffffff;
+                text-shadow: 2px 2px 4px #000000;
+                z-index: 10;
+                cursor: pointer;
+            }
+            .text-restart:hover {
+                color: #ffcc00;
+            }
+        `;
+        const styleElement = document.createElement('style');
+        styleElement.textContent = style;
+        document.head.appendChild(styleElement);
+
         console.log('finalScene');
         console.log('data:', data);
 
@@ -114,7 +114,7 @@ document.head.appendChild(styleElement);
             fill: '#ffffff',
             stroke: '#000000',
             strokeThickness: 5
-        }).setOrigin(0.5).setDepth(10).setVisible(true);
+        }).setOrigin(0.5).setDepth(101).setVisible(true);
 
         // Evento para reiniciar el juego
         this.restartText.setInteractive();
@@ -124,21 +124,23 @@ document.head.appendChild(styleElement);
             this.scene.stop('mainscene');
             this.scene.stop('hudscene');
             
+            // Reiniciar el joystick correctamente al reiniciar la pelea
+            
+            
             // Reiniciar el juego volviendo a la selección de personajes
             this.scene.stop('loadscene'); // Cambia a la escena de selección de personajes
             document.getElementById('characterSelect').style.display = 'block'; // Mostrar selección de personajes
-            document.body.style.background = 'url("/assets/stages/intro/bg7.png")'; // Fondo de selección
+            document.body.style.background = 'black'; // Fondo de selección
             document.body.style.backgroundSize = 'cover';
             document.body.style.backgroundPosition = 'center';
             document.body.style.backgroundRepeat = 'no-repeat';
+         
             this.game.canvas.focus();
             this.events.on('gameOver', (result) => {
                 this.scene.stop('mainscene');
                 this.scene.stop('hudscene');
                 this.scene.stop('resultscene');
                 this.scene.start('resultscene', 'loadscene', { result });
-                
-
             })
             this.events.off('gameOver');
         })
@@ -150,3 +152,4 @@ document.head.appendChild(styleElement);
 });
 
 export default resultscene;
+

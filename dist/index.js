@@ -210,3 +210,4 @@ function startGame2() {
 }
 
 export default startGame2;
+

@@ -67,7 +67,7 @@ function showCharacterSelect() {
     if (startButton2) startButton2.style.display = 'none';
 
     // Aplicar fondo de selección de personajes
-    document.body.style.backgroundImage = 'url("./assets/stages/intro/bg7.png")';
+    document.body.style.backgroundImage = 'none';
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundRepeat = 'no-repeat';

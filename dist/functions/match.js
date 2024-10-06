@@ -22,6 +22,7 @@ var Match = new Phaser.Class({
             this.p2stuntimer = this.scene.time.addEvent(this.p2stun_cfg);
             this.setHud();
             this.setListeners();
+           
         },
     setHud: function() {
         this.p1health = new Healthbar(this.scene, {id: 'p1', x: 50, y: 80, width: 300, height: 15, flipped: true});
@@ -82,20 +83,11 @@ var Match = new Phaser.Class({
     
         // Añadir frames adicionales para cada golpe recibido
         for (var i = 0; i < config.onHit; i++) {
-            hitAnim.addFrame([{ key: lastframe.textureKey, frame: lastframe.textureFrame }]);
+            hitAnim.addFrame({ key: lastframe.textureKey, frame: lastframe.textureFrame });
             opponent.container.x += config.push / config.onHit;
         }
     
-        // Eliminar los frames adicionales después de la animación
-        hitAnim.once('resetFrame', function() {
-            for (var i = 0; i < config.onHit; i++) {
-                hitAnim.removeFrameAt(frames);
-            }
-        }, this);
-    
-        // Ejecutar la animación de recibir golpe
-        opponent.thit(config);
-    
+
         // Calcular y aplicar el daño
         var damage = config.damage * config.onHit;
         opponent.health -= damage;
@@ -107,10 +99,22 @@ var Match = new Phaser.Class({
         this.updateHealth(opponent, opponent.health);
         this.updateStun(opponent, config);
         this.updatePower(opponent, config);
+    
         // Pausar y resetear el temporizador de stun
         this[opponent.id + 'stun'].stuntimer.paused = true;
         this[opponent.id + 'stuntimer'].reset(this[opponent.id + 'stun_cfg']);
+    
+        // Eliminar los frames adicionales después de la animación
+        hitAnim.once('resetFrame', function() {
+            for (var i = 0; i < config.onHit; i++) {
+                hitAnim.removeFrameAt(frames);
+            }
+        }, this);
+// animacion de hit en stance el oponente y el jugador
+        opponent.thit(config);
     },
+    
+    
     
     setOnBlock: function(id, config) {
         // Determinar el oponente y el jugador
@@ -157,101 +161,145 @@ var Match = new Phaser.Class({
             .setAlign(config.align).setVisible(config.visible);
     },
     start: function() {
-    this.pretimer.paused = false;
-    this.player1.control.lock(true);
-
-    if (this.pretimer.repeatCount == 5) {
-        this.info.setText('ROUND ' + this.round);
-    } else if (this.pretimer.repeatCount == 1) {
-        this.info.setText("FIGHT!");
-    } else if (this.pretimer.repeatCount == 0) {
-
-        this.info.setVisible(false);
-        this.player1.control.lock(false);
-
-        this.timer.paused = false;
-        this.time.text = this.timer.repeatCount;
-        this.time.text < 10 ? this.time.setColor('#E53941').setText('0' + this.time.text) : null;
-    }
-    if (this.timer.repeatCount == 0) {
-        this.endCause = 'TIME OVER';
-        this.setResult();
-        this.end();
-    }
-},
-
-end: function() {
-    this.ended = true;
-    this.timer.paused = true;
-    this.player1.control.lock(true);
-    this.posttimer.paused = false;
-
-    var winner = this.result.draw ? "DRAW GAME" : this.result.winner.config.name + " WINS!";
-    if (this.posttimer.repeatCount == 10) {
-        this.info.setText(this.endCause).setVisible(true); // pause last animation
-        if (!this.result.draw) this.result.winner.tstance();
-    } else if (this.posttimer.repeatCount == 6) {
-        this.info.setText(winner.toUpperCase()).setVisible(true); // determine winner
-        this.setMarks();
-    } else if (this.posttimer.repeatCount == 3) { // additional info
-        if (!this.result.draw) {
-            this.result.winner.health == 1000 ? this.info.setText("PERFECT!").setVisible(true) : null;
+        // Limpiar todos los listeners de input antes de comenzar la pelea
+        this.scene.input.removeAllListeners();
+    
+        // Resetear el estado del joystick
+        if (this.player1.control && this.player1.control.resetJoystick) {
+            this.player1.control.resetJoystick(); // Llama al método de reinicio del joystick
         }
-    } else if (this.posttimer.repeatCount == 0) { 
-        this.info.setVisible(false);
-        // Solo reiniciar si el resultado final es empate
-        if (this.result.draw && (this.result.p1wins == this.raceTo && this.result.p2wins == this.raceTo)) {
-            this.scene.scene.start('loadscene'); // Reinicia el juego en caso de empate final
-        } else if (this.result.p1wins == this.raceTo || this.result.p2wins == this.raceTo) {
-            this.scene.scene.start('resultscene', { result: this.result }); // última escena
+        if (this.player1.control && this.player1.control.resetControls) {
+            this.player1.control.resetControls(); // Llama al método de reinicio del joystick
+        }
+        this.pretimer.paused = false;
+        this.player1.control.lock(true);
+    
+        document.getElementById('controls').style.display = 'block';
+        document.getElementById('joystick').style.display = 'block';
+    
+        if (this.pretimer.repeatCount == 5) {
+            this.info.setText('ROUND ' + this.round);
+        } else if (this.pretimer.repeatCount == 1) {
+            this.info.setText("FIGHT!");
+        } else if (this.pretimer.repeatCount == 0) {
+            this.info.setVisible(false);
+            this.player1.control.lock(false);
+    
+            this.timer.paused = false;
+            this.time.text = this.timer.repeatCount;
+            this.time.text < 10 ? this.time.setColor('#E53941').setText('0' + this.time.text) : null;
+        }
+    
+        if (this.timer.repeatCount == 0) {
+            this.endCause = 'TIME OVER';
+            this.setResult();
+            this.end();
+        }
+    },
+    
+    end: function() {
+        this.ended = true;
+        this.timer.paused = true;
+    
+        // Bloquear los controles de ambos jugadores
+        this.player1.control.lock(true);
+        this.player2.control.lock(true);
+    
+        this.posttimer.paused = false;
+    
+        // Ocultar controles y joystick al finalizar la ronda
+        document.getElementById('controls').style.display = 'none';
+        document.getElementById('joystick').style.display = 'none';
+    
+        var winner = this.result.draw ? "DRAW GAME" : this.result.winner.config.name + " WINS!";
+        
+        if (this.posttimer.repeatCount == 10) {
+            this.info.setText(this.endCause).setVisible(true);
+            if (!this.result.draw) this.result.winner.tstance();
+        } else if (this.posttimer.repeatCount == 6) {
+            this.info.setText(winner.toUpperCase()).setVisible(true);
+            this.setMarks();
+        } else if (this.posttimer.repeatCount == 3) {
+            if (!this.result.draw) {
+                this.result.winner.health == 1000 ? this.info.setText("PERFECT!").setVisible(true) : null;
+            }
+        } else if (this.posttimer.repeatCount == 0) {
+            this.info.setVisible(false);
+    
+            // Condición para determinar si se alcanzaron las dos victorias necesarias
+            if (this.result.p1wins == this.raceTo || this.result.p2wins == this.raceTo) {
+                this.scene.scene.start('resultscene', { result: this.result });
+            } else if (this.result.draw && (this.result.p1wins == this.raceTo && this.result.p2wins == this.raceTo)) {
+                this.scene.scene.start('loadscene');
+            } else {
+                this.result.round = this.round + 1;
+                this.scene.scene.start('mainscene');
+                this.scene.scene.start('hudscene', { result: this.result });
+            }
+        }
+    },
+    
+    isTouchDevice: function() {
+        return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    },
+    setResult: function() {
+        this.result.draw = false;
+    
+        // Condición para Player 1 gana
+        if (this.player1.health > this.player2.health) {
+            this.result.winner = this.player1;
+            this.result.p1wins += 1;
+            this.player1.wins += 1;
+    
+        // Condición para Player 2 gana
+        } else if (this.player2.health > this.player1.health) {
+            this.result.winner = this.player2;
+            this.result.p2wins += 1;
+            this.player2.wins += 1;
+    
+        // Condición para empate
         } else {
-            this.result.round = this.round + 1;
-            this.scene.scene.start('mainscene'); 
-            this.scene.scene.start('hudscene', { result: this.result }); // reinicia con los resultados
+            this.result.draw = true;
         }
-    }
-},
-
-setResult: function() {
-    this.result.draw = false;
-    if (this.player1.health > this.player2.health) {
-        this.result.winner = this.player1;
-        this.result.p1wins += 1;
-        this.player1.wins += 1;
-    } else if (this.player2.health > this.player1.health) {
-        this.result.winner = this.player2;
-        this.result.p2wins += 1;
-        this.player2.wins += 1;
-    } else if (this.player2.health == this.player1.health) {
-        this.result.draw = true;
-        this.result.p1wins += 1;
-        this.result.p2wins += 1;
-        this.player1.wins += 1;
-        this.player2.wins += 1;
-    }
-},
+    },
     
     updateHealth: function(player, value) {
 
+        
+     // Actualizar barra de salud y color según el valor de la salud
+     if (value <= 1000) {
+        this[player.id + 'health'].setColor(0xffab51); // red (critical)
+        this[player.id + 'health'].setPercent(value);
+    }
+        // Actualizar barra de salud y color según el valor de la salud
         if (value <= 880) {
             this[player.id + 'health'].setColor(0xffab51); // red (critical)
             this[player.id + 'health'].setPercent(value);
         }
-
+    
         if (value <= 500) {
             this[player.id + 'health'].setColor(0xff0000, 0xfc5353); // red (critical)
             this[player.id + 'health'].setPercent(value);
         }
+        
         if (value <= 180) {
-            this[player.id + 'health'].setColor(0xffab51,0xfc5353); // red (critical)
+            this[player.id + 'health'].setColor(0xffab51, 0xfc5353); // red (critical)
             this[player.id + 'health'].setPercent(value);
         }
-
-
+        if (value <= 10) {
+            this[player.id + 'health'].setColor(0xffab51, 0xfc5353); // red (critical)
+            this[player.id + 'health'].setPercent(value);
+        }
         if (value <= 0) {
+            
+            // Bloquear controles cuando la salud llegue a 0
             this.endCause = 'K.O!!!';
+            this[player.id + 'health'].setPercent(0);
+            this.player1.control.lock(true);
+            this.player2.control.lock(true);
             this.setResult();
             this.end();
+            
         }
     },
     updateStun: function(player, config) {

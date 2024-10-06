@@ -3,10 +3,10 @@ body {
 
     background-color: #000000;
     margin: 0;
-    overflow: hidden;
+    overflow: auto;
     /* Cambiado a hidden para evitar scroll innecesario */
     font-family: Arial, sans-serif;
-    overflow-y: hidden;
+
 }
 
 .titles {
@@ -340,10 +340,10 @@ body {
 }
 
 .select {
-    margin-bottom: 3%;
+    margin-bottom: 1.5%;
     padding: 0%;
     display: flex;
-    margin-top: 3%;
+    margin-top: 1.5%;
     align-content: center;
     justify-content: center;
     align-items: center;

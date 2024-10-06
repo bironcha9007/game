@@ -5,14 +5,13 @@ class VirtualJoystick {
         this.scene = scene;
         this.player = player;
 
-        // Crear un contenedor para el joystick
-        this.joystickBase = this.scene.add.circle(280, 280, 30, 0x6666ff).setScrollFactor(0);
-        this.joystickBase.setAlpha(0.1);
-        this.joystickHandle = this.scene.add.circle(280, 280, 20, 0xff0000).setScrollFactor(0);
-        this.joystickBase.setDepth(99); 
-        this.joystickHandle.setAlpha(0.1); // Ajustar la opacidad
-        this.joystickHandle.setDepth(100); // Asegura que esté por encima
-        this.maxDistance = 40;
+        // Si ya existen joystickBase o joystickHandle, los destruimos
+        
+
+        // Reiniciar propiedades
+        this.joystickBase = null;
+        this.joystickHandle = null;
+        this.maxDistance = 20;
         this.isDragging = false;
 
         // Inicializar las propiedades de dirección del joystick
@@ -21,14 +20,22 @@ class VirtualJoystick {
         this.upPressed = false;
         this.downPressed = false;
 
-        this.init();
+        // Crear un nuevo contenedor para el joystick
+        this.joystickBase = this.scene.add.circle(280, 280, 30, 0x6666ff).setScrollFactor(0);
+        this.joystickBase.setAlpha(0.1);
+        this.joystickHandle = this.scene.add.circle(280, 280, 20, 0xff0000).setScrollFactor(0);
+        this.joystickBase.setDepth(99); 
+        this.joystickHandle.setAlpha(0.1); // Ajustar la opacidad
+        this.joystickHandle.setDepth(100); // Asegura que esté por encima
+
+        this.init(); // Iniciar los eventos del joystick
     }
 
     init() {
+        // Manejadores de eventos para el joystick
         this.scene.input.on('pointerdown', (pointer) => {
             this.isDragging = true;
             this.moveHandle(pointer);
-            this.resetJoystick();
         });
 
         this.scene.input.on('pointermove', (pointer) => {
@@ -40,6 +47,7 @@ class VirtualJoystick {
         this.scene.input.on('pointerup', () => {
             this.isDragging = false;
             this.resetJoystick();
+            
         });
     }
 
@@ -66,40 +74,32 @@ class VirtualJoystick {
             if (angleDeg < 0) {
                 angleDeg += 360; // Convertir ángulo negativo en positivo
             }
+
             // Actualizar el movimiento del jugador según la dirección del joystick
             if (angleDeg >= 0 && angleDeg < 45) {
                 this.player.twalk(this.player.f);  // Caminar hacia la derecha
                 if (this.player.state === 'crouch') this.player.tstance();
                 this.rightPressed = true;
             }
-            
             else if (angleDeg >= 160 && angleDeg < 210) {
                 this.player.twalk(this.player.b);  // Caminar hacia la izquierda
                 if (this.player.state === 'crouch') this.player.tstance();
                 this.leftPressed = true;
-            } 
-            
+            }
             else if (angleDeg >= 250 && angleDeg < 290) {
-               
-                    this.player.tjump('');  // Saltar hacia atrás
-                
+                this.player.tjump('');  // Saltar hacia atrás
                 this.upPressed = true;
             } 
-            
             else if (angleDeg >= 200 && angleDeg < 230) {
-                
-              
                 this.leftPressed = true;
                 this.upPressed = true;
                 this.player.tjump('b'); // Saltar hacia atrás
-           } 
+            }
             else if (angleDeg >= 295 && angleDeg < 330) {
-            
-                             
-                        this.rightPressed = true;
-                        this.upPressed = true;
-                        this.player.tjump('f'); // Saltar hacia adelante
-                        }
+                this.rightPressed = true;
+                this.upPressed = true;
+                this.player.tjump('f'); // Saltar hacia adelante
+            }
             else if (angleDeg >= 80 && angleDeg < 130) {
                 this.player.tcrouch('');  // Agacharse
                 this.downPressed = true;
@@ -108,9 +108,13 @@ class VirtualJoystick {
     }
 
     resetJoystick() {
+        
+        // Restablecer la posición del mango del joystick
         this.joystickHandle.x = this.joystickBase.x;
         this.joystickHandle.y = this.joystickBase.y;
-        this.player.tstance();
+
+        // Resetear la postura del jugador
+
 
         // Resetear las direcciones cuando se suelta el joystick
         this.leftPressed = false;
@@ -119,7 +123,6 @@ class VirtualJoystick {
         this.downPressed = false;
     }
 }
-
 
 class TouchButtons {
     constructor(scene, player) {
@@ -134,34 +137,94 @@ class TouchButtons {
             this.hpButton = document.getElementById('hp');
             this.hkButton = document.getElementById('hk');
 
+            this.currentAttackType = null; // Guardar el tipo de ataque actual
+            this.attackInterval = null; // Guardar el intervalo de repetición
+
             this.addTouchListeners();
+            this.resetControls();
         }
     }
 
     addTouchListeners() {
-        this.lpButton.addEventListener('pointerdown', () => {
-            this.player.tattk('slp');  // Simulate light punch
-        });
+        // Listener para Light Punch
+        this.lpButton.addEventListener('pointerdown', () => this.startAttack('lp'));
+        this.lpButton.addEventListener('pointerup', () => this.stopAttack());
 
-        this.lkButton.addEventListener('pointerdown', () => {
-            this.player.tattk('slk');  // Simulate light kick
-        });
+        // Listener para Light Kick
+        this.lkButton.addEventListener('pointerdown', () => this.startAttack('lk'));
+        this.lkButton.addEventListener('pointerup', () => this.stopAttack());
 
-        this.mpButton.addEventListener('pointerdown', () => {
-            this.player.tattk('smp');  // Medium punch
-        });
+        // Listener para Medium Punch
+        this.mpButton.addEventListener('pointerdown', () => this.startAttack('mp'));
+        this.mpButton.addEventListener('pointerup', () => this.stopAttack());
 
-        this.mkButton.addEventListener('pointerdown', () => {
-            this.player.tattk('smk');  // Medium kick
-        });
+        // Listener para Medium Kick
+        this.mkButton.addEventListener('pointerdown', () => this.startAttack('mk'));
+        this.mkButton.addEventListener('pointerup', () => this.stopAttack());
 
-        this.hpButton.addEventListener('pointerdown', () => {
-            this.player.tattk('shp');  // High punch
-        });
+        // Listener para High Punch
+        this.hpButton.addEventListener('pointerdown', () => this.startAttack('hp'));
+        this.hpButton.addEventListener('pointerup', () => this.stopAttack());
 
-        this.hkButton.addEventListener('pointerdown', () => {
-            this.player.tattk('shk');  // High kick
-        });
+        // Listener para High Kick
+        this.hkButton.addEventListener('pointerdown', () => this.startAttack('hk'));
+        this.hkButton.addEventListener('pointerup', () => this.stopAttack());
+    }
+
+    startAttack(type) {
+        // Ejecuta el ataque inmediatamente al presionar
+        this.executeAttack(type);
+
+        // Si un ataque diferente está en curso, detén el ataque anterior
+        if (this.currentAttackType && this.currentAttackType !== type) {
+            this.stopAttack();
+        }
+
+        this.currentAttackType = type; // Guarda el ataque actual
+
+        // Repetir el ataque a intervalos mientras se mantiene presionado
+        this.attackInterval = setInterval(() => {
+            this.executeAttack(type);
+        }, 100); // Ajusta el tiempo según sea necesario
+    }
+
+    executeAttack(type) {
+        const state = this.player.state;
+
+        if (state === 'crouch') {
+            // Ataques agachados
+            this.player.tcrattk(`c${type}`);
+        } else if (state === 'stance' || state === 'walk') {
+            // Ataques de pie
+            this.player.tattk(`s${type}`);
+        } else {
+            // Ataques saltando
+            this.player.tjattk(`j${type}`);
+        }
+    }
+
+    stopAttack() {
+        // Detener el ataque repetido
+        if (this.attackInterval) {
+            clearInterval(this.attackInterval);
+            this.attackInterval = null;
+        }
+
+        this.currentAttackType = null; // Reinicia el tipo de ataque actual
+
+  
+    }
+
+    resetControls() {
+        // Resetear todos los botones
+        this.currentAttackType = null;
+        this.attackInterval = null;
+        this.lpButton = false;
+        this.lkButton = false;
+        this.mpButton = false;
+        this.mkButton = false;
+        this.hpButton = false;
+        this.hkButton = false;
     }
 }
 var Input = new Phaser.Class({
@@ -171,11 +234,19 @@ var Input = new Phaser.Class({
         this.setupKeys();
         this.joystick = new VirtualJoystick(scene, player);
         this.touchButtons = new TouchButtons(scene, player);
+        
     },
 
     lock: function (state) {
         this.scene.input.keyboard.enabled = !state;
     },
+    
+
+    resetAllControls() {
+        this.resetJoystick(); // Llama a la función de reinicio del joystick
+        this.resetControls(); // Llama a la función de reinicio de controles
+    },
+
     setupKeys: function () {
         if (this.player.id === 'p1') {
             // Configuración de teclas para el jugador p1
@@ -279,6 +350,7 @@ var Input = new Phaser.Class({
         this.controlDirection();
         this.controlAttack();
         this.controlInputs();
+
     },
     invertControls: function () {
         var object = this.player.container;
@@ -347,53 +419,71 @@ var Input = new Phaser.Class({
     }
     ,
     controlAttack: function () {
-
-        
-         if (this.player.state === 'crouch') {
-            // Manejamos ataques agachados específicos (si hay algún estado especial)
-            if (this.lp.isDown) {
+        var state = this.player.state;
+        var moves = ['attk', 'spattk', 'crattk', 'tjattk'];
+    
+        // Verificar si no se están presionando botones de ataque o de dirección
+       
+    
+        // Ataques agachados
+        if (state === 'crouch') {
+            if (this.lp.isDown || this.touchButtons.lpButton) {
                 this.player.tcrattk('clp');
-            } else if (this.lk.isDown) {
+                
+            } else if (this.lk.isDown || this.touchButtons.lkButton) {
                 this.player.tcrattk('clk');
-            } else if (this.mp.isDown) {
+            } else if (this.mp.isDown || this.touchButtons.mpButton) {
                 this.player.tcrattk('cmp');
-            } else if (this.mk.isDown) {
+            } else if (this.mk.isDown || this.touchButtons.mkButton) {
                 this.player.tcrattk('cmk');
-            } else if (this.hp.isDown) {
+            } else if (this.hp.isDown || this.touchButtons.hpButton) {
                 this.player.tcrattk('chp');
-            } else if (this.hk.isDown) {
+            } else if (this.hk.isDown || this.touchButtons.hkButton) {
                 this.player.tcrattk('chk');
             }
-        } else if (this.player.container.body.onFloor()) {
-            // Ataques de pie
-            if (this.lp.isDown) {
+        } 
+        // Ataques de pie
+        else if (state === 'stance' ||state === 'walk') {
+            if (this.lp.isDown || this.touchButtons.lpButton) {
                 this.player.tattk('slp');
-            } else if (this.lk.isDown) {
+            } else if (this.lk.isDown || this.touchButtons.lkButton) {
                 this.player.tattk('slk');
-            } else if (this.mp.isDown) {
+            } else if (this.mp.isDown || this.touchButtons.mpButton) {
                 this.player.tattk('smp');
-            } else if (this.mk.isDown) {
+            } else if (this.mk.isDown || this.touchButtons.mkButton) {
                 this.player.tattk('smk');
-            } else if (this.hp.isDown) {
+            } else if (this.hp.isDown || this.touchButtons.hpButton) {
                 this.player.tattk('shp');
-            } else if (this.hk.isDown) {
+            } else if (this.hk.isDown || this.touchButtons.hkButton) {
                 this.player.tattk('shk');
             }
-        } else {
-            // Ataques saltando
-            if (this.lp.isDown) {
+        } 
+        // Ataques en salto
+        else {
+            if (this.lp.isDown || this.touchButtons.lpButton) {
                 this.player.tjattk('jlp');
-            } else if (this.lk.isDown) {
+            } else if (this.lk.isDown || this.touchButtons.lkButton) {
                 this.player.tjattk('jlk');
-            } else if (this.mp.isDown) {
+            } else if (this.mp.isDown || this.touchButtons.mpButton) {
                 this.player.tjattk('jmp');
-            } else if (this.mk.isDown) {
+            } else if (this.mk.isDown || this.touchButtons.mkButton) {
                 this.player.tjattk('jmk');
-            } else if (this.hp.isDown) {
+            } else if (this.hp.isDown || this.touchButtons.hpButton) {
                 this.player.tjattk('jhp');
-            } else if (this.hk.isDown) {
+            } else if (this.hk.isDown || this.touchButtons.hkButton) {
                 this.player.tjattk('jhk');
             }
+        }
+    },
+    resetControlsAndJoystick: function() {
+        // Llamar a resetJoystick
+        if (this.resetJoystick) {
+            this.resetJoystick(); // Asegúrate de que resetJoystick exista en este contexto
+        }
+    
+        // Llamar a resetControls
+        if (this.resetControls) {
+            this.resetControls(); // Asegúrate de que resetControls exista en este contexto
         }
     },
     controlInputs: function () {

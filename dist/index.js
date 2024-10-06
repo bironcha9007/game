@@ -27,7 +27,7 @@ characters.forEach(character => {
 document.addEventListener('DOMContentLoaded', () => {
     openingAudio = new Audio('/assets/audio/Opening.mp3');
     openingAudio.loop = true; 
-    openingAudio.volume = 0.0;
+    openingAudio.volume = 0.5;
     openingAudio.play(); 
 
     document.getElementById('startButton').addEventListener('click', startGame);
@@ -142,7 +142,7 @@ function startGame() {
     document.getElementById('startButton2').style.display = 'none';
     document.getElementById('characterSelect').style.display = 'none';
     document.getElementById('startButton').style.display = 'none';
-    document.body.style.background = '#000'; 
+    document.body.style.background = 'none'; 
 }
 
 function startGame2() {
@@ -201,7 +201,7 @@ function startGame2() {
     // Reiniciar el juego desde la escena de carga
     game.scene.start('loadscene');
     document.body.style.background = '#000'; 
-
+   
     // Pausar el audio de apertura si está sonando
     if (openingAudio) {
         openingAudio.pause();
@@ -210,4 +210,3 @@ function startGame2() {
 }
 
 export default startGame2;
-

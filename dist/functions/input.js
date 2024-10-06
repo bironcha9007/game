@@ -88,6 +88,7 @@ class VirtualJoystick {
             }
             else if (angleDeg >= 250 && angleDeg < 290) {
                 this.player.tjump('');  // Saltar hacia atrás
+                
                 this.upPressed = true;
             } 
             else if (angleDeg >= 200 && angleDeg < 230) {
@@ -112,7 +113,7 @@ class VirtualJoystick {
         // Restablecer la posición del mango del joystick
         this.joystickHandle.x = this.joystickBase.x;
         this.joystickHandle.y = this.joystickBase.y;
-
+        this.player.tstance();
         // Resetear la postura del jugador
 
 
@@ -216,7 +217,7 @@ class TouchButtons {
     }
 
     resetControls() {
-        // Resetear todos los botones
+        // Resetear todos los botonesw
         this.currentAttackType = null;
         this.attackInterval = null;
         this.lpButton = false;
@@ -475,17 +476,7 @@ var Input = new Phaser.Class({
             }
         }
     },
-    resetControlsAndJoystick: function() {
-        // Llamar a resetJoystick
-        if (this.resetJoystick) {
-            this.resetJoystick(); // Asegúrate de que resetJoystick exista en este contexto
-        }
     
-        // Llamar a resetControls
-        if (this.resetControls) {
-            this.resetControls(); // Asegúrate de que resetControls exista en este contexto
-        }
-    },
     controlInputs: function () {
         this.scene.input.keyboard.on('keycombomatch', function (event) {
             if (this['dash' + this.player.f].matched) {

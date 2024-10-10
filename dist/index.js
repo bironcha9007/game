@@ -27,7 +27,7 @@ characters.forEach(character => {
 document.addEventListener('DOMContentLoaded', () => {
     openingAudio = new Audio('/assets/audio/Opening.mp3');
     openingAudio.loop = true; 
-    openingAudio.volume = 0.0;
+    openingAudio.volume = 0.5;
     openingAudio.play(); 
 
     document.getElementById('startButton').addEventListener('click', startGame);
@@ -67,7 +67,7 @@ function showCharacterSelect() {
     if (startButton2) startButton2.style.display = 'none';
 
     // Aplicar fondo de selección de personajes
-    document.body.style.backgroundImage = 'url("assets/stages/intro/bg8.png")';
+    document.body.style.backgroundImage = 'none';
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundRepeat = 'no-repeat';
@@ -142,11 +142,10 @@ function startGame() {
     document.getElementById('startButton2').style.display = 'none';
     document.getElementById('characterSelect').style.display = 'none';
     document.getElementById('startButton').style.display = 'none';
-    document.body.style.background = '#000'; 
+    document.body.style.background = 'none'; 
 }
 
 function startGame2() {
-    // Verificar que ambos personajes hayan sido seleccionados
     if (!selectedCharacters.player1 || !selectedCharacters.player2) {
         alert('Por favor seleccione un personaje para ambos jugadores.');
         return;
@@ -160,39 +159,43 @@ function startGame2() {
 
     // Ocultar la UI de selección de personajes
     document.getElementById('characterSelect').style.display = 'none';
-    
-    // Limpiar cualquier instancia previa de Phaser antes de reiniciar
+
+    // Si ya hay un juego en marcha, solo reinicia las escenas
     if (game) {
+
         game.events.off('startNewFight'); // Desvincular cualquier evento previo
         game.destroy(true); // Destruir la instancia actual del juego
-    }
+    } 
+        // Si no hay una instancia de juego, crea una nueva
+        game = new Phaser.Game({
+            type: Phaser.AUTO,
+            parent: 'sfvjs',
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 800,
+                height: 600
+            },
+            dom: { createContainer: true },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 650 },
+                    debug: true 
+                }
+            },
+            scene: [LoadScene, MainScene, HudScene, ResultScene],
+            input: { gamepad: true }
+        });
 
-    // Reiniciar el juego con una nueva instancia
-    game = new Phaser.Game({
-        type: Phaser.AUTO,
-        parent: 'sfvjs',
-        scale: {
-            mode: Phaser.Scale.FIT,
-            autoCenter: Phaser.Scale.CENTER_BOTH,
-            width: 800,
-            height: 600
-        },
-        dom: { createContainer: true },
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 650 },
-                debug: true 
-            }
-        },
-        scene: [LoadScene, MainScene, HudScene, ResultScene],
-        input: {
-            gamepad: true
-        }
-    });
-
-    // Reiniciar el juego desde la escena de carga
-    game.scene.start('loadscene');
+        game.events.on('startNewFight', () => {
+            game.scene.stop('resultscene');
+            game.scene.stop('mainscene');
+            game.scene.stop('hudscene');
+            game.scene.start('loadscene');
+        });
+   
+        game.scene.start('loadscene');
     document.body.style.background = '#000'; 
 
     // Pausar el audio de apertura si está sonando
@@ -201,5 +204,6 @@ function startGame2() {
         openingAudio.currentTime = 0;
     }
 }
+
 
 export default startGame2;

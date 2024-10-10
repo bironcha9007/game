@@ -3,8 +3,8 @@ var mov = [
     { name: 'walkf', frame: { start: 10146, end: 10153, frameRate: 12, repeat: -1 }, speed: 150 },
     { name: 'walkb', frame: { start: 10154, end: 10161, frameRate: 12, repeat: -1 }, speed: 100 },
     { name: 'jump', frame: { start: 10162, end: 10170, frameRate: 8, repeat: 0 }, speedY: 300 },
-    { name: 'jumpf', frame: { start: 10172, end: 10178, frameRate: 10, repeat: -1 }, speedX: 150, speedY: 340 },
-    { name: 'jumpb', frame: { start: 10172, end: 10178, frameRate: 10, repeat: -1 }, speedX: 150, speedY: 340 },
+    { name: 'jumpf', frame: { start: 10172, end: 10178, frameRate: 8, repeat: -1 }, speedX: 150, speedY: 340 },
+    { name: 'jumpb', frame: { start: 10172, end: 10178, frameRate: 8, repeat: -1 }, speedX: 150, speedY: 340 },
     { name: 'dashf', frame: { start: 10205, end: 10210, frameRate: 12, repeat: 0 }, speed: 220, fx: { name: 'ground-dust', x: -80, y: 5 } },
     { name: 'dashb', frame: { start: 10211, end: 10216, frameRate: 12, repeat: 0 }, speed: 160, fx: { name: 'ground-dust', x: -80, y: 5 } },
     { name: 'crouch', frame: { start: 10180, end: 10181, frameRate: 6, repeat: -1 }, speed: 0, hurtbox: { x: 0, y: 20, width: 40, height: 60 } },
@@ -27,9 +27,9 @@ var atk = [
     { name: 'jlp', frame: { start: 10472, end: 10478, frameRate: 8, repeat: 0 }, speed: 100, hitbox: { fx: { name: 'hitsparks-small', x: 20, y: -20 }, start: 1, active: 2, hits: [3], x: 40, y: -20, width: 60, height: 20, damage: 10, stun: 10, onBlk: 2, onHit: 4, push: 15, atklvl: 'h' } },
     { name: 'jmp', frame: { start: 10472, end: 10478, frameRate: 8, repeat: 0 }, speed: 100, hitbox: { fx: { name: 'hitsparks-small', x: 20, y: -20 }, start: 2, active: 3, hits: [5], x: 40, y: -30, width: 70, height: 20, damage: 20, stun: 15, onBlk: 1, onHit: 6, push: 15, atklvl: 'h' } },
     { name: 'jhp', frame: { start: 10472, end: 10478, frameRate: 8, repeat: 0 }, speed: 100, hitbox: { fx: { name: 'hitsparks-fireball', x: 20, y: -20 }, start: 2, active: 4, hits: [5], x: 40, y: -20, width: 80, height: 30, damage:20, stun: 20, onBlk: 1, onHit: 8, push: 10, atklvl: 'h' } },
-    { name: 'jlk', frame: { start: 10498, end: 10502, frameRate: 8, repeat: 0 }, speed: 100, hitbox: { fx: { name: 'hitsparks-small', x: 20, y: -20 }, start: 1, active: 2, hits: [3], x: 50, y: -20, width: 60, height: 20, damage: 10, stun: 10, onBlk: 2, onHit: 4, push: 15, atklvl: 'h' } },
-    { name: 'jmk', frame: { start: 10498, end: 10502, frameRate: 8, repeat: 0 }, speed: 100, hitbox: { fx: { name: 'hitsparks-small', x: 20, y: -20 }, start: 2, active: 3, hits: [5], x: 50, y: -30, width: 70, height: 20, damage: 20, stun: 15, onBlk: 1, onHit: 6, push: 15, atklvl: 'h' } },
-    { name: 'jhk', frame: { start: 10498, end: 10502, frameRate: 8, repeat: 0 }, speed: 100, hitbox: { fx: { name: 'hitsparks-fireball', x: 20, y: -20 }, start: 2, active: 4, hits: [6], x: 50, y: -20, width: 80, height: 30, damage:20, stun: 20, onBlk: 1, onHit: 8, push: 10, atklvl: 'h' } },
+    { name: 'jlk', frame: { start: 10497, end: 10502, frameRate: 7, repeat: 0 }, speed: 200, hitbox: { fx: { name: 'hitsparks-small', x: 20, y: -20 }, start: 1, active: 2, hits: [3], x: 50, y: -20, width: 60, height: 20, damage: 10, stun: 10, onBlk: 2, onHit: 4, push: 15, atklvl: 'h' } },
+    { name: 'jmk', frame: { start: 10480, end: 10486, frameRate: 8, repeat: 0 }, speed: 220, hitbox: { fx: { name: 'hitsparks-small', x: 20, y: -20 }, start: 2, active: 3, hits: [5], x: 50, y: -30, width: 70, height: 20, damage: 20, stun: 15, onBlk: 1, onHit: 6, push: 15, atklvl: 'h' } },
+    { name: 'jhk', frame: { start: 10497, end: 10502, frameRate: 7, repeat: 0 }, speed: 230, hitbox: { fx: { name: 'hitsparks-fireball', x: 20, y: -20 }, start: 2, active: 4, hits: [6], x: 50, y: -20, width: 80, height: 30, damage:20, stun: 20, onBlk: 1, onHit: 8, push: 10, atklvl: 'h' } },
 ]
 var cricarts = [
     { name: 'ca1', frame: { start: 10261, end: 10268, frameRate: 12, repeat: 5 }, fx: { name: 'ground-dust', x: -80, y: 5 }, speed: 0, hitbox: { fx: { name: 'hitsparks-fireball', x: 20, y: -30 }, start: 3, active: 5, hits: [6], x: 50, y: -25, width: 80, height: 30, damage: 20, stun: 20, onBlk: 4, onHit: 10, push: 5, atklvl: 'h' } },

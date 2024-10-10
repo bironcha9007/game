@@ -146,7 +146,6 @@ function startGame() {
 }
 
 function startGame2() {
-    // Verificar que ambos personajes hayan sido seleccionados
     if (!selectedCharacters.player1 || !selectedCharacters.player2) {
         alert('Por favor seleccione un personaje para ambos jugadores.');
         return;
@@ -160,53 +159,52 @@ function startGame2() {
 
     // Ocultar la UI de selección de personajes
     document.getElementById('characterSelect').style.display = 'none';
-    
-    // Limpiar cualquier instancia previa de Phaser antes de reiniciar
-    if (game) {
-        game.events.off('startNewFight'); // Desvincular cualquier evento previo
-        game.destroy(true); // Destruir la instancia actual del juego
-    }
 
-    // Reiniciar el juego con una nueva instancia
-    game = new Phaser.Game({
-        type: Phaser.AUTO,
-        parent: 'sfvjs',
-        scale: {
-            mode: Phaser.Scale.FIT,
-            autoCenter: Phaser.Scale.CENTER_BOTH,
-            width: 800,
-            height: 600
-        },
-        dom: { createContainer: true },
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 650 },
-                debug: false 
-            }
-        },
-        scene: [LoadScene, MainScene, HudScene, ResultScene],
-        input: {
-            gamepad: true
-        }
-    });
-    game.events.on('startNewFight', () => {
+    // Si ya hay un juego en marcha, solo reinicia las escenas
+    if (game) {
         game.scene.stop('resultscene');
         game.scene.stop('mainscene');
         game.scene.stop('hudscene');
-        game.scene.stop('loadscene');
+        game.scene.start('loadscene'); // Reinicia la escena de carga
+    } else {
+        // Si no hay una instancia de juego, crea una nueva
+        game = new Phaser.Game({
+            type: Phaser.AUTO,
+            parent: 'sfvjs',
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 800,
+                height: 600
+            },
+            dom: { createContainer: true },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 650 },
+                    debug: true 
+                }
+            },
+            scene: [LoadScene, MainScene, HudScene, ResultScene],
+            input: { gamepad: true }
+        });
 
-        game.scene.start('loadscene');  
-    });
-    // Reiniciar el juego desde la escena de carga
-    game.scene.start('loadscene');
+        game.events.on('startNewFight', () => {
+            game.scene.stop('resultscene');
+            game.scene.stop('mainscene');
+            game.scene.stop('hudscene');
+            game.scene.start('loadscene');
+        });
+    }
+
     document.body.style.background = '#000'; 
-   
+
     // Pausar el audio de apertura si está sonando
     if (openingAudio) {
         openingAudio.pause();
         openingAudio.currentTime = 0;
     }
 }
+
 
 export default startGame2;

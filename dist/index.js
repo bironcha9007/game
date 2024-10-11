@@ -4,7 +4,7 @@ import MainScene from './scenes/main';
 import HudScene from './scenes/hud';
 import ResultScene from './scenes/result';
 
-let app;
+
 
 let game;
 let openingAudio; 

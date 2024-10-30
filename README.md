@@ -1,4 +1,4 @@
-# SF3 JS Edition
+# Bayron Castillo SF3 JS Edition
 
 Fighting game ported in NodeJS
 
